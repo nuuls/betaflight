@@ -427,7 +427,8 @@ static void updateDynLpfCutoffs(timeUs_t currentTimeUs, float throttle)
 
 static void applyMixerAdjustmentLinear(float *motorMix, const bool airmodeEnabled)
 {
-    float airmodeTransitionPercent = 1.0f;
+    float airmodeStrength = currentPidProfile->airmode_strength;
+    float airmodeTransitionPercent = airmodeStrength / 100;
     float motorDeltaScale = 0.5f;
 
     if (!airmodeEnabled && throttle < 0.5f) {
@@ -467,7 +468,8 @@ static void applyMixerAdjustment(float *motorMix, const float motorMixMin, const
     throttle += pidGetAirmodeThrottleOffset();
     float airmodeThrottleChange = 0.0f;
 #endif
-    float airmodeTransitionPercent = 1.0f;
+    float airmodeStrength = currentPidProfile->airmode_strength;
+    float airmodeTransitionPercent = airmodeStrength / 100;
 
     if (!airmodeEnabled && throttle < 0.5f) {
         // this scales the motor mix authority to be 0.5 at 0 throttle, and 1.0 at 0.5 throttle as airmode off intended for things to work.

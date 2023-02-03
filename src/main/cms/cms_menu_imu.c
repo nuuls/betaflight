@@ -516,6 +516,7 @@ static CMS_Menu cmsx_menuLaunchControl = {
 };
 #endif
 
+static uint8_t  cmsx_airmodeStrength;
 static uint8_t  cmsx_angleStrength;
 static uint8_t  cmsx_horizonStrength;
 static uint8_t  cmsx_horizonTransition;
@@ -560,6 +561,7 @@ static const void *cmsx_profileOtherOnEnter(displayPort_t *pDisp)
 
     const pidProfile_t *pidProfile = pidProfiles(pidProfileIndex);
 
+    cmsx_airmodeStrength =     pidProfile->airmode_strength;
     cmsx_angleStrength =     pidProfile->pid[PID_LEVEL].P;
     cmsx_horizonStrength =   pidProfile->pid[PID_LEVEL].I;
     cmsx_horizonTransition = pidProfile->pid[PID_LEVEL].D;
@@ -615,6 +617,7 @@ static const void *cmsx_profileOtherOnExit(displayPort_t *pDisp, const OSD_Entry
     pidProfile->pid[PID_LEVEL].I = cmsx_horizonStrength;
     pidProfile->pid[PID_LEVEL].D = cmsx_horizonTransition;
     pidProfile->levelAngleLimit  = cmsx_levelAngleLimit;
+    pidProfile->airmode_strength  = cmsx_airmodeStrength;
 
     pidProfile->anti_gravity_gain   = cmsx_antiGravityGain;
 
@@ -665,6 +668,7 @@ static const OSD_Entry cmsx_menuProfileOtherEntries[] = {
     { "FF JITTER",     OME_UINT8,  NULL, &(OSD_UINT8_t)  { &cmsx_feedforward_jitter_factor,     0,     20,   1  }    },
     { "FF BOOST",      OME_UINT8,  NULL, &(OSD_UINT8_t)  { &cmsx_feedforward_boost,             0,     50,   1  }    },
 #endif
+    { "AIRMODE STR",   OME_UINT8,  NULL, &(OSD_UINT8_t)  { &cmsx_airmodeStrength,          1,    100,   1  }    },
     { "ANGLE STR",   OME_UINT8,  NULL, &(OSD_UINT8_t)  { &cmsx_angleStrength,          0,    200,   1  }    },
     { "HORZN STR",   OME_UINT8,  NULL, &(OSD_UINT8_t)  { &cmsx_horizonStrength,        0,    200,   1  }    },
     { "HORZN TRS",   OME_UINT8,  NULL, &(OSD_UINT8_t)  { &cmsx_horizonTransition,      0,    200,   1  }    },
